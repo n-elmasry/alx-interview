@@ -1,41 +1,48 @@
 #!/usr/bin/python3
-""" A script that reads stdin line by line and computes metrics """
+""" a script that reads stdin line by line and computes metrics"""
 
 import sys
-import re
 
-input_format = r'^(\d{1,3}\.){3}\d{1,3} - \[\d{2}/\w{3}/\d{4}:\d{2}:\d{2}:\d{2} [+-]\d{4}\] "GET /projects/260 HTTP/1.1" (\d{3}) (\d+)$'
 
-status_codes = [200, 301, 400, 401, 403, 404, 405, 500]
-status_count = {code: 0 for code in status_codes}
+def print_message(status_codes, total_file_size):
+    """ printing message """
+
+    print("File size: {}".format(total_file_size))
+    for key, val in sorted(status_codes.items()):
+        if val != 0:
+            print("{}: {}".format(key, val))
+
 
 total_file_size = 0
+code = 0
 line_count = 0
+status_codes = {"200": 0,
+                "301": 0,
+                "400": 0,
+                "401": 0,
+                "403": 0,
+                "404": 0,
+                "405": 0,
+                "500": 0}
 
 try:
     for line in sys.stdin:
-        match = re.match(input_format, line)
-        if match:
+        parsed_line = line.split()
+        parsed_line = parsed_line[::-1]
+
+        if len(parsed_line) > 2:
             line_count += 1
-            status_code = int(match.group(2))  # Group 2 is the status code
-            file_size = int(match.group(3))  # Group 3 is the file size
 
-            total_file_size += file_size
-            if status_code in status_count:
-                status_count[status_code] += 1
+            if line_count <= 10:
+                total_file_size += int(parsed_line[0])  # file size
+                code = parsed_line[1]  # status code
 
-            if line_count % 10 == 0:
-                print(f'File size: {total_file_size}')
-                for code in sorted(status_codes):
-                    if status_count[code] > 0:
-                        print(f'{code}: {status_count[code]}')
+                if (code in status_codes.keys()):
+                    status_codes[code] += 1
 
-except KeyboardInterrupt:
-    pass
+            if (line_count == 10):
+                print_message(status_codes, total_file_size)
+                line_count = 0
 
 finally:
-    # Print the final metrics after the loop ends or on keyboard interrupt
-    print(f'File size: {total_file_size}')
-    for code in sorted(status_codes):
-        if status_count[code] > 0:
-            print(f'{code}: {status_count[code]}')
+    print_message(status_codes, total_file_size)
