@@ -3,33 +3,37 @@
 
 
 def validUTF8(data):
-    """ determines if a given data set represents a valid UTF-8 encoding."""
-    # Number of bytes left to process in the current UTF-8 character
+    """ determines if a given data set represents a valid UTF-8 encoding"""
+
+    # Number of bytes in the current UTF-8 character
     num_bytes = 0
 
-    for byte in data:
-        # Convert the integer to its binary string representation
-        binary_rep = format(byte, '#010b')[-8:]
+    # Masks to check the significant bits
+    mask1 = 1 << 7    # 10000000
+    mask2 = 1 << 6    # 01000000
 
+    for byte in data:
+        mask = 1 << 7
         if num_bytes == 0:
-            # Determine the number of bytes in this UTF-8 character
-            if binary_rep.startswith('0'):
+            # Determine the number of bytes in the UTF-8 character
+            while mask & byte:
+                num_bytes += 1
+                mask = mask >> 1
+
+            # 1-byte character
+            if num_bytes == 0:
                 continue
-            elif binary_rep.startswith('110'):
-                num_bytes = 1
-            elif binary_rep.startswith('1110'):
-                num_bytes = 2
-            elif binary_rep.startswith('11110'):
-                num_bytes = 3
-            else:
+
+            # If the number of bytes is more than 4 or 1
+            if num_bytes == 1 or num_bytes > 4:
                 return False
         else:
-            # For continuation bytes, they must start with '10'
-            if not binary_rep.startswith('10'):
+            # For the subsequent bytes, they must start with '10xxxxxx'
+            if not (byte & mask1 and not (byte & mask2)):
                 return False
 
-        # Decrement the number of bytes left to process
+        # Decrease the number of bytes to process
         num_bytes -= 1
 
-    # If all bytes have been processed correctly, num_bytes should be 0
+    # If there are still bytes remaining, the data is invalid
     return num_bytes == 0
