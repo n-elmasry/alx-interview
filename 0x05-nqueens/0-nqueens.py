@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 """nqueens"""
 import sys
+from typing import List
 
 
-def nqueens():
+def nqueens() -> None:
     """nqueens"""
     if len(sys.argv) != 2:
         print('Usage: nqueens N')
@@ -26,7 +27,7 @@ def nqueens():
 
     result = []
 
-    def backtrack(r, solution):
+    def backtrack(r: int, solution: List[List[int]]) -> None:
         """backtrack"""
         if r == n:
             print(solution)
