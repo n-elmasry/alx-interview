@@ -6,7 +6,7 @@ nqueens puzzle
 import sys
 
 
-def nqueens() -> None:
+def nqueens():
     """
     Solve the N-Queens problem.
     """
@@ -29,7 +29,7 @@ def nqueens() -> None:
     positive_diagonal = set()
     negative_diagonal = set()
 
-    def backtrack(r, solution) -> None:
+    def backtrack(r, solution):
         """
         Backtrack to find all solutions.
         """
