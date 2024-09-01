@@ -1,12 +1,16 @@
 #!/usr/bin/python3
-"""nqueens puzzle"""
+"""
+nqueens puzzle
+"""
 
 import sys
 from typing import List
 
 
 def nqueens() -> None:
-    """Solve the N-Queens problem."""
+    """
+    Solve the N-Queens problem.
+    """
     if len(sys.argv) != 2:
         print('Usage: nqueens N')
         sys.exit(1)
@@ -27,7 +31,9 @@ def nqueens() -> None:
     negative_diagonal = set()
 
     def backtrack(r: int, solution: List[List[int]]) -> None:
-        """Backtrack to find all solutions."""
+        """
+        Backtrack to find all solutions.
+        """
         if r == n:
             print(solution)
             return
