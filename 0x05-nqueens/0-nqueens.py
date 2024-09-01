@@ -4,7 +4,6 @@ nqueens puzzle
 """
 
 import sys
-from typing import List
 
 
 def nqueens() -> None:
@@ -30,7 +29,7 @@ def nqueens() -> None:
     positive_diagonal = set()
     negative_diagonal = set()
 
-    def backtrack(r: int, solution: List[List[int]]) -> None:
+    def backtrack(r, solution) -> None:
         """
         Backtrack to find all solutions.
         """
