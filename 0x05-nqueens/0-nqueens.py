@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""nqueens"""
+"""nqueens puzzle"""
+
 import sys
 from typing import List
 
@@ -24,8 +25,6 @@ def nqueens() -> None:
     column = set()
     positive_diagonal = set()
     negative_diagonal = set()
-
-    result = []
 
     def backtrack(r: int, solution: List[List[int]]) -> None:
         """backtrack"""
