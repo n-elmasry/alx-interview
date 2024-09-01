@@ -2,7 +2,6 @@
 """
 nqueens puzzle
 """
-
 import sys
 
 
