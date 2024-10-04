@@ -7,7 +7,7 @@ def makeChange(coins, total):
     needed to meet a given amount total"""
     if total == 0:
         return 0
-    if coins == [] or coins is None:
+    if total < 0:
         return -1
     dp = [total + 1] * (total + 1)
 
